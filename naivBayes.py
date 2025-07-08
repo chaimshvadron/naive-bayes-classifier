@@ -6,20 +6,18 @@ def load_data_csv(file_path):
 def calculate_conditional_counts(data):
     target_column = data.columns[-1]
     features = data.columns[:-1]
-    classes = data[target_column].unique()
-    
+    classes = data[target_column].value_counts()   
     result = {}
-
-    for class_value in classes:
-        class_subset = data[data[target_column] == class_value]
-        
-        if class_value not in result:
-            result[class_value] = {}
-
+    for class_name, class_count in classes.items():
+        class_subset = data[data[target_column] == class_name]     
+        if class_name not in result:
+            result[class_name] = {}
         for feature in features:
             value_counts = class_subset[feature].value_counts()
-            result[class_value][feature] = value_counts.to_dict()
-    
+            for value, count in value_counts.items():
+                if feature not in result[class_name]:
+                    result[class_name][feature] = {}
+                result[class_name][feature][value] = count / class_count
     return result
 
 
