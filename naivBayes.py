@@ -7,15 +7,15 @@ def load_data_csv(file_path):
             data[col] = data[col].astype(str)
     return data
 
+def get_unique_values_dict(data):
+    features = data.columns[:-1]
+    return {feature: data[feature].unique() for feature in features}
+
 def calculate_conditional_counts(data):
     target_column = data.columns[-1]
     features = data.columns[:-1]
-
-    all_possible_values = {
-        feature: data[feature].unique()
-        for feature in features
-    }
-
+    
+    all_possible_values = get_unique_values_dict(data)
     result = {}
 
     grouped = data.groupby(target_column)
@@ -37,5 +37,14 @@ def calculate_conditional_counts(data):
 
 if __name__ == "__main__":
     data = load_data_csv('data/PlayTennis.csv')
+    
+    unique_values = get_unique_values_dict(data)
+    print("Unique values for each feature:")
+    for feature, values in unique_values.items():
+        print(f"{feature}: {values}")
+    
+    print("\n" + "="*50 + "\n")
+    
     conditional_counts = calculate_conditional_counts(data)
+    print("Conditional probabilities:")
     print(conditional_counts)
