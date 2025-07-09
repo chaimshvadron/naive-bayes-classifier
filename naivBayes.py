@@ -10,7 +10,6 @@ def load_data_csv(file_path):
 def calculate_conditional_counts(data):
     target_column = data.columns[-1]
     features = data.columns[:-1]
-    classes = data[target_column].unique()
 
     all_possible_values = {
         feature: data[feature].unique()
