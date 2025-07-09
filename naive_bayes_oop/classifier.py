@@ -4,11 +4,14 @@ class Classifier:
         best_class = None
         best_score = 0
         
-        for class_name in model:
-            score = 1 
+        conditionals = model['conditionals']
+        priors = model['priors']
+        
+        for class_name in conditionals:
+            score = priors[class_name]
             
             for feature, value in customer_choices.items():
-                score *= model[class_name][feature][value]
+                score *= conditionals[class_name][feature][value]
             
             if score > best_score:
                 best_score = score

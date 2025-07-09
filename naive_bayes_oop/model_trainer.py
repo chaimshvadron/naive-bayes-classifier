@@ -4,6 +4,13 @@ class ModelTrainer:
         features = data.columns[:-1]
         return {feature: data[feature].unique() for feature in features}
     
+    def calculate_prior_probabilities(self, data):
+        target_column = data.columns[-1]
+        total_count = len(data)
+        class_counts = data[target_column].value_counts()
+        
+        return {class_name: count / total_count for class_name, count in class_counts.items()}
+    
     def calculate_conditional_counts(self, data):
         target_column = data.columns[-1]
         features = data.columns[:-1]
@@ -27,3 +34,9 @@ class ModelTrainer:
                     result[class_name][feature][value] = (count + 1) / (class_count + num_possible_values)
 
         return result
+    
+    def train_model(self, data):
+        return {
+            'conditionals': self.calculate_conditional_counts(data),
+            'priors': self.calculate_prior_probabilities(data)
+        }
