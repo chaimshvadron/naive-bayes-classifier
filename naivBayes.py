@@ -10,7 +10,7 @@ def load_data_csv(file_path):
 def calculate_conditional_counts(data):
     target_column = data.columns[-1]
     features = data.columns[:-1]
-    classes = data[target_column].value_counts()
+    classes = data[target_column].unique()
 
     all_possible_values = {
         feature: data[feature].unique()
@@ -19,23 +19,22 @@ def calculate_conditional_counts(data):
 
     result = {}
 
-    for class_name, class_count in classes.items():
-        class_subset = data[data[target_column] == class_name]
+    grouped = data.groupby(target_column)
+    # Group the data by the target column
+    for class_name, group in grouped:
         result[class_name] = {}
-
+        class_count = len(group)
+        # Count the number of instances for each class
         for feature in features:
             result[class_name][feature] = {}
-
-            values = all_possible_values[feature]
-            num_possible_values = len(values)
-
-            for value in values:
-                count = len(class_subset[class_subset[feature] == value])
+            value_counts = group[feature].value_counts()
+            num_possible_values = len(all_possible_values[feature])
+            # Calculate the conditional probabilities
+            for value in all_possible_values[feature]:
+                count = value_counts.get(value, 0)
                 result[class_name][feature][value] = (count + 1) / (class_count + num_possible_values)
 
     return result
-
-
 
 if __name__ == "__main__":
     data = load_data_csv('data/PlayTennis.csv')
