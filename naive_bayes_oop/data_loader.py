@@ -1,0 +1,19 @@
+import pandas as pd
+
+class DataLoader:
+    
+    def load_data_csv(self, file_path):
+        data = pd.read_csv(file_path)
+        for col in data.columns:
+            if data[col].dtype == 'bool':
+                data[col] = data[col].astype(str)
+        return data
+    
+    def load_and_split_csv(self, file_path, test_size=0.3, random_state=None):
+        """Load CSV and split into train and test dataframes"""
+        data = self.load_data_csv(file_path)
+        # sample test set
+        test = data.sample(frac=test_size, random_state=random_state)
+        # remaining as train set
+        train = data.drop(test.index)
+        return train, test

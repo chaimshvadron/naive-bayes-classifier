@@ -50,6 +50,7 @@ def classify_customer(customer_choices, model):
         if score > best_score:
             best_score = score
             best_class = class_name
+    print(f"Current best score: {best_score} for class: {class_name}")
     
     return best_class
 if __name__ == "__main__":
@@ -71,9 +72,9 @@ if __name__ == "__main__":
     
     # 3. Example: classify a customer
     customer_choices = {
-        'Outlook': 'Sunny',
-        'Temperature': 'Hot', 
-        'Humidity': 'High',
+        'Outlook': 'Overcast',
+        'Temperature': 'Mild',
+        'Humidity': 'Normal', 
         'Windy': 'False'
     }
     
@@ -93,6 +94,6 @@ if __name__ == "__main__":
         'Windy': 'False'
     }
     
-    print(f"Another customer's choices: {customer_choices2}")
-    best_class2 = classify_customer(customer_choices2, model)
-    print(f"Recommendation for the second customer: {best_class2}")
+    # print(f"Another customer's choices: {customer_choices2}")
+    # best_class2 = classify_customer(customer_choices2, model)
+    # print(f"Recommendation for the second customer: {best_class2}")
