@@ -59,18 +59,3 @@ class NaiveBayesController:
             print(f"\n❌ Error: {str(e)}")
             print("Process stopped.")
     
-    # Future functions
-    def save_model(self, file_path):
-        """Save model to file"""
-        # TODO: implement model saving
-        pass
-    
-    def load_model(self, file_path):
-        """Load model from file"""
-        # TODO: implement model loading
-        pass
-    
-    def evaluate_model(self):
-        """Evaluate the model"""
-        # TODO: implement model evaluation
-        pass
