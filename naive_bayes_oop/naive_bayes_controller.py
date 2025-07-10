@@ -6,10 +6,8 @@ from classifier import Classifier
 from user_interface import UserInterface
 
 class NaiveBayesController:
-    """Main controller that manages the entire process"""
     
     def __init__(self):
-        # Create all classes
         self.data_loader = DataLoader()
         self.data_cleaner = DataCleaner()
         self.trainer = ModelTrainer()
@@ -17,13 +15,12 @@ class NaiveBayesController:
         self.classifier = Classifier()
         self.ui = UserInterface()
         
-        # Internal variables
         self.data = None
         self.cleaned_data = None
         self.model = None
         self.unique_values = None
     
-    def load_and_prepare_data(self, file_path='../data/PlayTennis.csv'):
+    def load_and_prepare_data(self, file_path='./data/PlayTennis.csv'):
         """Load and prepare the data"""
         self.ui.show_step_message(1, "LOADING DATA")
         self.data = self.data_loader.load_data_csv(file_path)
