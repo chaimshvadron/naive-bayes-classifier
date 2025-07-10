@@ -22,7 +22,7 @@ class NaiveBayesController:
         self.model = None
         self.unique_values = None
     
-    def load_and_prepare_data(self, file_path='./data/PlayTennis.csv'):
+    def load_and_prepare_data(self, file_path='./data/mushroom.csv'):
         # Step 1: Load and split data into train and test sets
         self.ui.show_step_message(1, "LOADING & SPLITTING DATA")
         train_df, test_df = self.data_loader.load_and_split_csv(file_path, test_size=0.3, random_state=42)
