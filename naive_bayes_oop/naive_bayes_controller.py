@@ -21,7 +21,6 @@ class NaiveBayesController:
         self.unique_values = None
     
     def load_and_prepare_data(self, file_path='./data/PlayTennis.csv'):
-        """Load and prepare the data"""
         self.ui.show_step_message(1, "LOADING DATA")
         self.data = self.data_loader.load_data_csv(file_path)
         print(f"Data loaded successfully! Shape: {self.data.shape}")
@@ -31,7 +30,6 @@ class NaiveBayesController:
         print("Data cleaning completed!")
     
     def train_model(self):
-        """Train the model"""
         self.ui.show_step_message(3, "TRAINING MODEL")
         
         self.unique_values = self.trainer.get_unique_values_dict(self.cleaned_data)
