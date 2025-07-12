@@ -2,7 +2,7 @@ class ModelTrainer:
     
     def get_unique_values_dict(self, data):
         features = data.columns[:-1]
-        return {feature: data[feature].unique() for feature in features}
+        return {feature: list(data[feature].unique()) for feature in features}
     
     def calculate_prior_probabilities(self, data):
         target_column = data.columns[-1]

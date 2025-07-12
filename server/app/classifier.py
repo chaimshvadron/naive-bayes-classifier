@@ -1,3 +1,5 @@
+# classifier.py
+
 class Classifier:
     
     def classify_customer(self, customer_choices, model):
