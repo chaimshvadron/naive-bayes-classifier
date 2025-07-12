@@ -10,8 +10,8 @@ class UserInterface:
         for feature, values in unique_values.items():
             print(f" - {feature}: {', '.join(values)}")
 
-    def interactive_classification(self, classifier, model, unique_values):
-        print("\nStarting interactive classification:")
+    def interactive_classification(self, classify_fn, unique_values):
+        print("\nStarting interactive classification via API:")
         while True:
             customer_choices = {}
             for feature, values in unique_values.items():
@@ -23,8 +23,11 @@ class UserInterface:
                         break
                     else:
                         print(f"Invalid choice. Choose from {values}.")
-            result = classifier.classify_customer(customer_choices, model)
-            print(f"Predicted class: {result}")
+            # Call the API classify function
+            response = classify_fn(customer_choices)
+            predicted = response.get("predicted_class")
+            reliability = response.get("reliability")
+            print(f"Predicted class: {predicted}, reliability: {reliability:.2f}%")
             cont = input("Classify another? (y/n): ").strip().lower()
             if cont != 'y':
                 print("Exiting interactive mode.")
