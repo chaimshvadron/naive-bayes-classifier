@@ -1,4 +1,4 @@
-"# naive-bayes-classifier"
+# naive-bayes-classifier
  
 ## Quick Start
 
