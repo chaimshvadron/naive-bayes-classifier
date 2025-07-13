@@ -7,7 +7,8 @@ class ModelTester:
 
         def is_correct_prediction(row):
             customer_choices = row[feature_columns].to_dict()
-            predicted = classifier.classify_customer(customer_choices, model)
+            prediction_result = classifier.classify_customer(customer_choices, model)
+            predicted = prediction_result["class"]  # Extract the class from the dictionary
             actual = row[target_column]
             return predicted == actual
 
