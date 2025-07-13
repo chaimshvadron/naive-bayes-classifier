@@ -22,12 +22,8 @@ def classify(request: dict):
     try:
         features = request.get("features", {})
         predicted = controller.classifier.classify_customer(features, controller.model)
-        reliability = controller.tester.test_model(
-            controller.model,
-            controller.cleaned_test_data,
-            controller.feature_columns,
-            controller.target_column
-        )
+        # use precomputed reliability from training
+        reliability = controller.reliability
         return {"predicted_class": predicted, "reliability": reliability}
     except Exception as e:
         return {"error": str(e)}

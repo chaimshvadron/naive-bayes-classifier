@@ -20,8 +20,9 @@ class NaiveBayesController:
         self.unique_values = None
         self.feature_columns = None
         self.target_column = None
+        self.reliability = None
     
-    def load_and_prepare_data(self, file_path: str = './data/mushroom.csv'):
+    def load_and_prepare_data(self, file_path: str = './data/synthetic_500k_dataset.csv'):
         train_df, test_df = self.data_loader.load_and_split_csv(file_path, test_size=0.3, random_state=42)
         self.data = train_df
         self.test_data = test_df
@@ -38,6 +39,12 @@ class NaiveBayesController:
         self.model = self.trainer.train_model(self.cleaned_data, self.feature_columns, self.target_column)
         print("Model training completed!")
 
-        reliability = self.tester.test_model(self.model, self.cleaned_test_data, self.feature_columns, self.target_column)
+        reliability = self.tester.test_model(
+            self.model,
+            self.cleaned_test_data,
+            self.feature_columns,
+            self.target_column
+        )
+        self.reliability = reliability
         print(f"Model reliability on test data: {reliability:.2f}%")
-            
+
