@@ -17,6 +17,7 @@ controller = NaiveBayesController()
 controller.load_and_prepare_data()
 controller.train_model()
 
+
 @app.post("/classify")
 def classify(request: dict):
     try:
