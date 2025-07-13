@@ -14,6 +14,7 @@ class Classifier:
             
             for feature, value in customer_choices.items():
                 score *= conditionals[class_name][feature][value]
+            print(f"Class: {class_name}, Score: {score:.9f}")
             
             if score > best_score:
                 best_score = score
