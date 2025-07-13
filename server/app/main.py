@@ -22,8 +22,10 @@ controller.train_model()
 def classify(request: dict):
     try:
         features = request.get("features", {})
+        if not features:
+            return {"error": "Missing input data. No features provided."}
+        print(f"Received features for classification: {features}")
         predicted = controller.classifier.classify_customer(features, controller.model)
-        # use precomputed reliability from training
         reliability = controller.reliability
         return {"predicted_class": predicted, "reliability": reliability}
     except Exception as e:
