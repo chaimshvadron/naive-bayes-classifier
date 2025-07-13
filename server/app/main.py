@@ -25,9 +25,13 @@ def classify(request: dict):
         if not features:
             return {"error": "Missing input data. No features provided."}
         print(f"Received features for classification: {features}")
-        predicted = controller.classifier.classify_customer(features, controller.model)
+        result = controller.classifier.classify_customer(features, controller.model)
         reliability = controller.reliability
-        return {"predicted_class": predicted, "reliability": reliability}
+        return {
+            "predicted_class": result["class"],
+            "probability": result["probability"],
+            "reliability": reliability
+        }
     except Exception as e:
         return {"error": str(e)}
 
