@@ -21,7 +21,7 @@ class NaiveBayesController:
         self.feature_columns = None
         self.target_column = None
     
-    def load_and_prepare_data(self, file_path: str = './data/PlayTennis.csv'):
+    def load_and_prepare_data(self, file_path: str = './data/mushroom.csv'):
         train_df, test_df = self.data_loader.load_and_split_csv(file_path, test_size=0.3, random_state=42)
         self.data = train_df
         self.test_data = test_df

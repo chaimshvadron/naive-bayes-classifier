@@ -14,3 +14,4 @@ class ModelTester:
         correct_predictions = test_data.apply(is_correct_prediction, axis=1).sum()
         total = len(test_data)
         return correct_predictions / total * 100.0
+                                                           
