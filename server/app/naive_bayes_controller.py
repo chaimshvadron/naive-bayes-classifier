@@ -1,8 +1,8 @@
-from data_loader import DataLoader
-from data_cleaner import DataCleaner
-from model_trainer import ModelTrainer
-from model_tester import ModelTester
-from classifier import Classifier
+from server.app.data_loader import DataLoader
+from server.app.data_cleaner import DataCleaner
+from server.app.model_trainer import ModelTrainer
+from server.app.model_tester import ModelTester
+from server.app.classifier import Classifier
 
 class NaiveBayesController:
     def __init__(self):

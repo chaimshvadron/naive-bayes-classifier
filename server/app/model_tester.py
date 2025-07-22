@@ -1,4 +1,4 @@
-from classifier import Classifier
+from server.app.classifier import Classifier
 
 class ModelTester:
     
