@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from naive_bayes_controller import NaiveBayesController
+from server.app.naive_bayes_controller import NaiveBayesController
 import numpy as np
 
 app = FastAPI()
