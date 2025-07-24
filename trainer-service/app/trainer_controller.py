@@ -22,8 +22,12 @@ class TrainerController:
         self.feature_columns = None
         self.target_column = None
         self.reliability = None
+        
+        # מעקב אחר מצב האימון
+        self.training_status = "not_started"  # not_started, loading_data, training, testing, completed
     
     def load_and_prepare_data(self, file_path: str = './data/phishing.csv'):
+        self.training_status = "loading_data"
         train_df, test_df = self.data_loader.load_and_split_csv(file_path, test_size=0.3, random_state=42)
         self.data = train_df
         self.test_data = test_df
@@ -36,10 +40,12 @@ class TrainerController:
         print("Data cleaning completed for train and test sets!")
     
     def train_model(self):
+        self.training_status = "training"
         self.unique_values = self.trainer.get_unique_values_dict(self.cleaned_data, self.feature_columns)
         self.model = self.trainer.train_model(self.cleaned_data, self.feature_columns, self.target_column)
         print("Model training completed!")
 
+        self.training_status = "testing"
         reliability = self.tester.test_model(
             self.model,
             self.cleaned_test_data,
@@ -48,6 +54,8 @@ class TrainerController:
         )
         self.reliability = reliability
         print(f"Model reliability on test data: {reliability:.2f}%")
+        
+        self.training_status = "completed"
     
     def get_trained_model(self):
         """Return the trained model with all needed info for classification"""
