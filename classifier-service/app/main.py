@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .classifier import Classifier
-from .model_client import ModelClient
+from app.classifier import Classifier
+from app.model_client import ModelClient
 import numpy as np
+import requests
 
 app = FastAPI()
 
@@ -19,11 +20,9 @@ app.add_middleware(
 model_client = ModelClient()
 classifier = Classifier()
 
-print("Starting to get trained model from training service...")
-success = model_client.get_model_from_trainer()
+print("Starting classifier service...")
+print("Model will be loaded when needed.")
 
-if not success:
-    print("Could not get model! Service will work in limited mode.")
 
 def convert_numpy_to_python(obj):
     if isinstance(obj, np.ndarray):
@@ -36,20 +35,72 @@ def convert_numpy_to_python(obj):
         return [convert_numpy_to_python(i) for i in obj]
     return obj
 
+def check_training_status():
+    """Check what's happening with the training service"""
+    try:
+        response = requests.get(f"{model_client.trainer_service_url}/health", timeout=5)
+        if response.status_code != 200:
+            return {"error": "Cannot connect to training service", "status": "service_error"}
+            
+        trainer_info = response.json()
+        training_status = trainer_info.get('training_status', 'unknown')
+        training_message = trainer_info.get('training_message', 'Unknown status')
+        
+        return {
+            "training_status": training_status,
+            "training_message": training_message,
+            "is_completed": training_status == "completed"
+        }
+        
+    except Exception as e:
+        return {"error": f"Training service is offline: {str(e)}", "status": "offline"}
+
 @app.post("/classify")
 def classify(request: dict):
     """Classify new data"""
     try:
+        # Check if we need to load the model
         if not model_client.model_data:
-            return {"error": "No model available. Try refreshing the model."}
+            print("Model not loaded yet, checking training status...")
             
+            status_info = check_training_status()
+            
+            # If there's an error connecting to trainer
+            if "error" in status_info:
+                return {
+                    "error": status_info["error"],
+                    "status": status_info.get("status", "unknown"),
+                    "message": "Cannot check training progress"
+                }
+            
+            # If training is not completed yet
+            if not status_info["is_completed"]:
+                return {
+                    "error": f"Model is still being trained: {status_info['training_message']}",
+                    "status": "training",
+                    "training_stage": status_info["training_status"],
+                    "message": status_info["training_message"],
+                    "suggestion": "Please wait and try again in a few minutes"
+                }
+            
+            # Training is completed, try to load model
+            print("Training completed, trying to load model...")
+            success = model_client.get_model_from_trainer()
+            if not success:
+                return {
+                    "error": "Model training completed but failed to load",
+                    "status": "load_error",
+                    "message": "There's a technical problem loading the trained model"
+                }
+        
+        # Validate input
         features = request.get("features", {})
         if not features:
             return {"error": "Missing input data. No features provided."}
             
         print(f"Got request for classification: {features}")
         
-        # use model for classification
+        # Perform classification
         model = model_client.model_data['model']
         result = classifier.classify_customer(features, model)
         reliability = model_client.model_data['reliability']

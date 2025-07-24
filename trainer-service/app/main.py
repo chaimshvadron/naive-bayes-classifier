@@ -56,8 +56,22 @@ def get_features():
 
 @app.get("/health")
 def health_check():
-    """Check if service is working"""
-    return {"status": "healthy", "service": "trainer"}
+    """Check if service is working and get training status"""
+    status_messages = {
+        "not_started": "Training has not started yet",
+        "loading_data": "Loading and preparing data...",
+        "training": "Training the model...",
+        "testing": "Testing model accuracy...",
+        "completed": "Training completed successfully"
+    }
+    
+    return {
+        "status": "healthy", 
+        "service": "trainer",
+        "training_status": controller.training_status,
+        "training_message": status_messages.get(controller.training_status, "Unknown status"),
+        "model_ready": controller.training_status == "completed"
+    }
 
 if __name__ == "__main__":
     import uvicorn
