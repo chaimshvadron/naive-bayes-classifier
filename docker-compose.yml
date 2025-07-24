@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   trainer-service:
     build: ./trainer-service
@@ -8,11 +6,6 @@ services:
       - "8001:8001"
     networks:
       - naive-bayes-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
   classifier-service:
     build: ./classifier-service
@@ -25,11 +18,6 @@ services:
       - naive-bayes-network
     environment:
       - TRAINER_SERVICE_URL=http://trainer-service:8001
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
 networks:
   naive-bayes-network:

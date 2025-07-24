@@ -1,8 +1,8 @@
-from data_loader import DataLoader
-from data_cleaner import DataCleaner
-from model_trainer import ModelTrainer
-from model_tester import ModelTester
-from classifier import Classifier
+from .data_loader import DataLoader
+from .data_cleaner import DataCleaner
+from .model_trainer import ModelTrainer
+from .model_tester import ModelTester
+from .classifier import Classifier
 import json
 
 class TrainerController:
