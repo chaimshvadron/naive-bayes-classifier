@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  trainer-service:
+    build: ./trainer-service
+    container_name: naive-bayes-trainer
+    ports:
+      - "8001:8001"
+    networks:
+      - naive-bayes-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  classifier-service:
+    build: ./classifier-service
+    container_name: naive-bayes-classifier
+    ports:
+      - "8000:8000"
+    depends_on:
+      - trainer-service
+    networks:
+      - naive-bayes-network
+    environment:
+      - TRAINER_SERVICE_URL=http://trainer-service:8001
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  naive-bayes-network:
+    driver: bridge
