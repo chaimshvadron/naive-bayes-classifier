@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from classifier import Classifier
-from model_client import ModelClient
+from .classifier import Classifier
+from .model_client import ModelClient
 import numpy as np
 
 app = FastAPI()

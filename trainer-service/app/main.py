@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from trainer_controller import TrainerController
+from .trainer_controller import TrainerController
 import numpy as np
 
 app = FastAPI()
